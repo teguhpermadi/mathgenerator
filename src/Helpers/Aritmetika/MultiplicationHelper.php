@@ -7,8 +7,8 @@ class MultiplicationHelper
     /**
      * Generate an multiplication problem from two numbers.
      *
-     * @param int $num1 First number.
-     * @param int $num2 Second number.
+     * @param  int  $num1  First number.
+     * @param  int  $num2  Second number.
      * @return array Contains the question and the answer.
      */
     public static function generateProblem(int $seed, int $min, int $max): array
@@ -29,7 +29,7 @@ class MultiplicationHelper
     /**
      * Generate any multiplication problems from a seed number.
      *
-     * @param string $problem The problem string.
+     * @param  string  $problem  The problem string.
      * @return array Contains the question and the answer.
      */
     public static function generateAnyProblems(int $seed, int $min, $max, int $count = 10): array
@@ -37,7 +37,7 @@ class MultiplicationHelper
         srand($seed);
         $problems = [];
 
-        for ($i=0; $i < $count; $i++) { 
+        for ($i = 0; $i < $count; $i++) {
             $num1 = rand($min, $max);
             $num2 = rand($min, $max);
 

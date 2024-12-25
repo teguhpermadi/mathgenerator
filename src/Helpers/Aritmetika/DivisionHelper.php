@@ -7,10 +7,10 @@ class DivisionHelper
     /**
      * Generate a division problem from two numbers.
      *
-     * @param int $seed Seed for random number generation.
-     * @param int $min Minimum value for random numbers.
-     * @param int $max Maximum value for random numbers.
-     * @param bool $negative Allow negative results.
+     * @param  int  $seed  Seed for random number generation.
+     * @param  int  $min  Minimum value for random numbers.
+     * @param  int  $max  Maximum value for random numbers.
+     * @param  bool  $negative  Allow negative results.
      * @return array Contains the question and the answer.
      */
     public static function generateProblem(int $seed, int $min, $max): array
@@ -32,7 +32,7 @@ class DivisionHelper
     /**
      * Generate any division problems from a seed number.
      *
-     * @param string $problem The problem string.
+     * @param  string  $problem  The problem string.
      * @return array Contains the question and the answer.
      */
     public static function generateAnyProblems(int $seed, int $min, $max, int $count = 10): array
@@ -40,7 +40,7 @@ class DivisionHelper
         srand($seed);
         $problems = [];
 
-        for ($i=0; $i < $count; $i++) { 
+        for ($i = 0; $i < $count; $i++) {
             $num1 = rand($min, $max);
             $num2 = rand($min, $max);
             $num3 = $num1 * $num2;
