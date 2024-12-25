@@ -2,7 +2,6 @@
 
 namespace Teguhpermadi\Mathgenerator\Helpers\Aritmetika;
 
-use Egulias\EmailValidator\Warning\TLD;
 use GeminiAPI\Client;
 use GeminiAPI\Resources\ModelName;
 use GeminiAPI\Resources\Parts\TextPart;
@@ -81,8 +80,8 @@ class AdditionHelper
     /**
      * Generate an addition problem from two numbers.
      *
-     * @param int $num1 First number.
-     * @param int $num2 Second number.
+     * @param  int  $num1  First number.
+     * @param  int  $num2  Second number.
      * @return array Contains the question and the answer.
      */
     public static function generateProblem(int $seed, int $min, int $max): array
@@ -107,7 +106,7 @@ class AdditionHelper
     /**
      * Generate any addition problems from a seed number.
      *
-     * @param string $problem The problem string.
+     * @param  string  $problem  The problem string.
      * @return array Contains the question and the answer.
      */
     public static function generateAnyProblems(int $seed, int $min, $max, int $count = 10): array
@@ -138,8 +137,8 @@ class AdditionHelper
     /**
      * Generate an addition world problem from two numbers.
      *
-     * @param int $num1 First number.
-     * @param int $num2 Second number.
+     * @param  int  $num1  First number.
+     * @param  int  $num2  Second number.
      * @return array Contains the question and the answer.
      */
     public static function generateWorldProblem(int $seed, int $min, int $max): array
@@ -157,13 +156,13 @@ class AdditionHelper
 
         // create a generative model request
         $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-            new TextPart('buatkan soal cerita dari penjumlahan berikut: ' . $num1 . ' + ' . $num2),
+            new TextPart('buatkan soal cerita dari penjumlahan berikut: '.$num1.' + '.$num2),
         );
 
         $answerResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
             new TextPart('contoh masalah: Ani memiliki 2 pensil dan Budi memiliki 3 pensil. Berapa jumlah pensil mereka?'),
             new TextPart('contoh jawaban: Jadi jumlah pensil mereka adalah {x} pensil.'),
-            new TextPart('Saya memiliki masalah: ' . $questionResponse->text()),
+            new TextPart('Saya memiliki masalah: '.$questionResponse->text()),
             new TextPart('Jawaban dari masalah tersebut dengan variable {x}.'),
         );
 
@@ -185,7 +184,7 @@ class AdditionHelper
     /**
      * Generate any addition world problems from a seed number.
      *
-     * @param string $problem The problem string.
+     * @param  string  $problem  The problem string.
      * @return array Contains the question and the answer.
      */
     public static function generateAnyWorldProblems(int $seed, int $min, $max, int $count = 10): array
@@ -206,13 +205,13 @@ class AdditionHelper
 
             // create a generative model request
             $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-                new TextPart('buatkan soal cerita dari penjumlahan berikut: ' . $num1 . ' + ' . $num2),
+                new TextPart('buatkan soal cerita dari penjumlahan berikut: '.$num1.' + '.$num2),
             );
 
             $answerResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
                 new TextPart('contoh masalah: Ani memiliki 2 pensil dan Budi memiliki 3 pensil. Berapa jumlah pensil mereka?'),
                 new TextPart('contoh jawaban: Jadi jumlah pensil mereka adalah {x} pensil.'),
-                new TextPart('Saya memiliki masalah: ' . $questionResponse->text()),
+                new TextPart('Saya memiliki masalah: '.$questionResponse->text()),
                 new TextPart('Jawaban dari masalah tersebut dengan variable {x}.'),
             );
 
