@@ -5,6 +5,7 @@ namespace Teguhpermadi\Mathgenerator;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Teguhpermadi\Mathgenerator\Commands\MathgeneratorCommand;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class MathgeneratorServiceProvider extends PackageServiceProvider
 {
@@ -17,10 +18,26 @@ class MathgeneratorServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('mathgenerator')
-            ->hasConfigFile()
+            ->hasConfigFile(['mathgenerator'])
             ->hasViews()
-            ->hasMigration('create_mathgenerator_table')
-            ->hasCommand(MathgeneratorCommand::class)
-            ->hasRoute('web'); // Ini akan otomatis mencari file routes/web.php
+            // ->hasMigration('create_mathgenerator_table')
+            ->hasMigrations([
+                // 'create_mathgenerator_table',
+                'create_addition_world_problems_table',
+            ])
+            // ->hasCommand(MathgeneratorCommand::class)
+            ->hasCommands([
+                MathgeneratorCommand::class,
+            ])
+            ->hasRoute('web') // Ini akan otomatis mencari file routes/web.php
+            ->hasInstallCommand(function(InstallCommand $command) {
+                $command
+                    ->publishConfigFile()
+                    ->publishAssets()
+                    ->publishMigrations()
+                    ->askToRunMigrations()
+                    ->copyAndRegisterServiceProviderInApp()
+                    ->askToStarRepoOnGitHub('teguhpermadi/mathgenerator');
+            });
     }
 }
