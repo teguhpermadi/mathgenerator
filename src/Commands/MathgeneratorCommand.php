@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Teguhpermadi\Mathgenerator\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class MathgeneratorCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'mathgenerator';
 
     public $description = 'My command';
 
