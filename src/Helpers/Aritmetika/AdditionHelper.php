@@ -9,6 +9,12 @@ use Teguhpermadi\Mathgenerator\Helpers\SeedHelper;
 
 class AdditionHelper
 {
+    /**
+     * Generate a choice for the answer.
+     *
+     * @param  int  $answer  The correct answer.
+     * @return array Contains the choices and the correct answer.
+     */
     public static function generateChoice(int $answer)
     {
         srand($answer);
@@ -156,7 +162,7 @@ class AdditionHelper
 
         // create a generative model request
         $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-            new TextPart('buatkan soal cerita dari penjumlahan berikut: '.$num1.' + '.$num2),
+            new TextPart('buatkan soal cerita sederhana dari penjumlahan berikut: '.$num1.' + '.$num2),
         );
 
         $answerResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
