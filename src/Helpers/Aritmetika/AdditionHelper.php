@@ -153,7 +153,7 @@ class AdditionHelper
 
         $choices = self::generateChoice($answer);
 
-        $client = new Client(env('GEMINI_API_KEY', 'AIzaSyBlW1AEMBkXN3mBoakF_lP0MdugAzfH9vA'));
+        $client = new Client(config('mathgenerator.gemini.api_key'));
 
         // create a generative model request
         $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
