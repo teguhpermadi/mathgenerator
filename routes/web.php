@@ -6,10 +6,10 @@ use Teguhpermadi\Mathgenerator\Helpers\Aritmetika\SubtractionHelper;
 use Teguhpermadi\Mathgenerator\Helpers\SeedHelper;
 
 Route::get('math-generator/addition', function () {
-    $seed = 'teguhpermadi';
-    $min = 1;
-    $max = 100;
-    $count = 3;
+    $seed = request('seed', 'teguhpermadi');
+    $min = request('min', 1);
+    $max = request('max', 100);
+    $count = request('count', 3);
 
     $random = SeedHelper::generateRandomNumber($seed);
     $addition = AdditionHelper::generateProblem($random, $min, $max);
@@ -27,15 +27,16 @@ Route::get('math-generator/addition', function () {
 });
 
 Route::get('math-generator/subtraction', function () {
-    $seed = 'teguhpermadi';
-    $min = 100;
-    $max = 500;
-    $count = 3;
+    $seed = request('seed', 'teguhpermadi');
+    $min = request('min', 1);
+    $max = request('max', 100);
+    $count = request('count', 3);
+    $negative = request('negative', false);
 
     $random = SeedHelper::generateRandomNumber($seed);
-    $subraction = SubtractionHelper::generateProblem($random, $min, $max);
-    $anySubtractions = SubtractionHelper::generateAnyProblems($random, $min, $max, $count);
-    $subtractionWorldProblem = SubtractionHelper::generateWorldProblem($random, $min, $max);
+    $subraction = SubtractionHelper::generateProblem($random, $min, $max, $negative);
+    $anySubtractions = SubtractionHelper::generateAnyProblems($random, $min, $max, $count, $negative);
+    $subtractionWorldProblem = SubtractionHelper::generateWorldProblem($random, $min, $max, $negative);
     // $additonAnyWorldProblems = SubtractionHelper::generateAnyWorldProblems($random, $min, $max, $count);
 
     return response()->json([

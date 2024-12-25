@@ -114,7 +114,7 @@ class SubtractionHelper
 
         $question = "$num1 - $num2 =";
         $answer = $num1 - $num2;
-        
+
         $choice = self::generateChoice($answer);
 
         return [
@@ -176,28 +176,51 @@ class SubtractionHelper
      * @param  int  $num2  Second number.
      * @return array Contains the question and the answer.
      */
-    public static function generateWorldProblem(int $seed, int $min, int $max): array
+    public static function generateWorldProblem(int $seed, int $min, int $max, bool $negative = false): array
     {
         srand($seed);
         $num1 = rand($min, $max);
         $num2 = rand($min, $max);
 
-        $question = "$num1 + $num2 =";
-        $answer = $num1 + $num2;
+        if ($negative) {
+            if ($num1 > $num2) {
+                [$num1, $num2] = [$num2, $num1];
+            } else {
+                [$num1, $num2] = [$num1, $num2];
+            }
+        } else {
+            if ($num1 < $num2) {
+                [$num1, $num2] = [$num2, $num1];
+            } else {
+                [$num1, $num2] = [$num1, $num2];
+            }
+        }
+
+        $question = "$num1 - $num2 =";
+        $answer = $num1 - $num2;
 
         $choices = self::generateChoice($answer);
 
         $client = new Client(config('mathgenerator.gemini.api_key'));
 
-        // create a generative model request
-        $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-            new TextPart('buatkan soal cerita sederhana dari pengurangan berikut: '.$num1.' + '.$num2),
-        );
+        if ($negative) {
+            // create a generative model request
+            $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
+                new TextPart('buatkan soal cerita tentang implementasi bilangan negatif dalam kehidupan. Misalnya: suhu, utang, ketinggian (kartografi), waktu, laba-rugi, dan lain sebagainya.'),
+                new TextPart('respon hanya soal cerita saja, tanpa judul atau penjelasan lainnya tentang cara penyelesaian soal tersebut.'),
+                new TextPart('soal cerita tentang operasi pengurangan : ' . $num1 . ' - ' . $num2),
+            );
+        } else {
+            // create a generative model request
+            $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
+                new TextPart('buatkan soal cerita sederhana dari operasi pengurangan berikut: ' . $question),
+            );
+        }
 
         $answerResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
             new TextPart('contoh masalah: Ani memiliki 3 pensil dan Budi memiliki 2 pensil. Berapa selisih pensil mereka?'),
             new TextPart('contoh jawaban: Jadi selisih pensil mereka adalah {x} pensil.'),
-            new TextPart('Saya memiliki masalah: '.$questionResponse->text()),
+            new TextPart('Saya memiliki masalah: ' . $questionResponse->text()),
             new TextPart('Jawaban dari masalah tersebut dengan variable {x}.'),
         );
 
@@ -210,6 +233,8 @@ class SubtractionHelper
         }
 
         return [
+            'question' => $question,
+            'answer' => $answer,
             'world_problem' => $questionResponse->text(),
             'world_problem_choice' => $choices['choices'],
             'correct' => $choices['correct'],
