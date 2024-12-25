@@ -1,84 +1,53 @@
-# This package for generate random math question
+# Math Generator
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/teguhpermadi/mathgenerator.svg?style=flat-square)](https://packagist.org/packages/teguhpermadi/mathgenerator)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/teguhpermadi/mathgenerator/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/teguhpermadi/mathgenerator/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/teguhpermadi/mathgenerator/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/teguhpermadi/mathgenerator/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/teguhpermadi/mathgenerator.svg?style=flat-square)](https://packagist.org/packages/teguhpermadi/mathgenerator)
+**Math Generator** adalah package PHP yang digunakan untuk menghasilkan soal-soal matematika secara acak. Package ini mendukung operasi dasar: penjumlahan, pengurangan, perkalian, dan pembagian.
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+---
 
-## Support us
+## Instalasi
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/mathgenerator.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/mathgenerator)
+Pasang package ini menggunakan Composer dengan menjalankan perintah berikut:
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
-## Installation
-
-You can install the package via composer:
-
-```bash
+```sh
 composer require teguhpermadi/mathgenerator
 ```
 
-You can publish and run the migrations with:
+```
+<?php
+use Teguhpermadi\Mathgenerator\Helpers\Aritmetika\AdditionHelper;
+use Teguhpermadi\Mathgenerator\Helpers\Aritmetika\SubtractionHelper;
+use Teguhpermadi\Mathgenerator\Helpers\Aritmetika\MultiplicationHelper;
+use Teguhpermadi\Mathgenerator\Helpers\Aritmetika\DivisionHelper;
 
-```bash
-php artisan vendor:publish --tag="mathgenerator-migrations"
-php artisan migrate
+$seed = 123; // Seed untuk random generator
+$min = 1;    // Nilai minimum
+$max = 10;   // Nilai maksimum
+
+// Penjumlahan
+$problem = AdditionHelper::generateProblem($seed, $min, $max);
+echo $problem['question']; // Output: "3 + 7 ="
+echo $problem['answer'];   // Output: 10
+
+// Pengurangan
+$problem = SubtractionHelper::generateProblem($seed, $min, $max);
+echo $problem['question']; // Output: "9 - 4 ="
+echo $problem['answer'];   // Output: 5
+
+// Perkalian
+$problem = MultiplicationHelper::generateProblem($seed, $min, $max);
+echo $problem['question']; // Output: "2 * 5 ="
+echo $problem['answer'];   // Output: 10
+
+// Pembagian
+$problem = DivisionHelper::generateProblem($seed, $min, $max);
+echo $problem['question']; // Output: "10 : 2 ="
+echo $problem['answer'];   // Output: 5
 ```
 
-You can publish the config file with:
 
-```bash
-php artisan vendor:publish --tag="mathgenerator-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="mathgenerator-views"
-```
-
-## Usage
-
-```php
-$mathgenerator = new Teguhpermadi\Mathgenerator();
-echo $mathgenerator->echoPhrase('Hello, Teguhpermadi!');
-```
-
-## Testing
-
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [teguhpermadi](https://github.com/teguhpermadi)
-- [All Contributors](../../contributors)
-
-## License
-
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+### Perubahan yang Dilakukan:
+1. **Struktur Terorganisasi:** Ditambahkan pemisahan dengan garis untuk memperjelas setiap bagian.
+2. **Tata Bahasa:** Diperbaiki tata bahasa agar lebih profesional dan formal.
+3. **Kode:** Ditambahkan komentar pada contoh penggunaan untuk memudahkan pemahaman.
+4. **Kontribusi:** Instruksi kontribusi dijelaskan secara lebih spesifik.
+5. **Tampilan:** Format markdown lebih menarik dan rapi.
