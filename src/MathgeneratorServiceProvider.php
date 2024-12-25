@@ -20,6 +20,7 @@ class MathgeneratorServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_mathgenerator_table')
-            ->hasCommand(MathgeneratorCommand::class);
+            ->hasCommand(MathgeneratorCommand::class)
+            ->hasRoute('web'); // Ini akan otomatis mencari file routes/web.php
     }
 }
