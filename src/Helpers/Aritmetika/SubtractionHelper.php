@@ -92,24 +92,33 @@ class SubtractionHelper
      * @param  bool  $negative  Allow negative results.
      * @return array Contains the question and the answer.
      */
-    public static function generateProblem(int $seed, int $min, $max, bool $negative = false): array
+    public static function generateProblem(int $seed, int $min, $max, string $negative = '0'): array
     {
         srand($seed);
         $num1 = rand($min, $max);
         $num2 = rand($min, $num1);
 
-        if ($negative) {
-            if ($num1 > $num2) {
-                [$num1, $num2] = [$num2, $num1];
-            } else {
-                [$num1, $num2] = [$num1, $num2];
-            }
-        } else {
-            if ($num1 < $num2) {
-                [$num1, $num2] = [$num2, $num1];
-            } else {
-                [$num1, $num2] = [$num1, $num2];
-            }
+        // switch case, jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
+        switch ($negative) {
+            case '0':
+                $num1 = abs($num1);
+                $num2 = abs($num2);
+                break;
+
+            case '1':
+                $num1 = abs($num1);
+                $num2 = -abs($num2);
+                break;
+
+            case '2':
+                $num1 = -abs($num1);
+                $num2 = -abs($num2);
+                break;
+
+            default:
+                $num1 = abs($num1);
+                $num2 = abs($num2);
+                break;
         }
 
         $question = "$num1 - $num2 =";
@@ -131,7 +140,7 @@ class SubtractionHelper
      * @param  string  $problem  The problem string.
      * @return array Contains the question and the answer.
      */
-    public static function generateAnyProblems(int $seed, int $min, $max, int $count = 10, bool $negative = false): array
+    public static function generateAnyProblems(int $seed, int $min, $max, int $count = 10, string $negative = '0'): array
     {
         srand($seed);
         $problems = [];
@@ -140,18 +149,27 @@ class SubtractionHelper
             $num1 = rand($min, $max);
             $num2 = rand($min, $max);
 
-            if ($negative) {
-                if ($num1 > $num2) {
-                    [$num1, $num2] = [$num2, $num1];
-                } else {
-                    [$num1, $num2] = [$num1, $num2];
-                }
-            } else {
-                if ($num1 < $num2) {
-                    [$num1, $num2] = [$num2, $num1];
-                } else {
-                    [$num1, $num2] = [$num1, $num2];
-                }
+            // switch case, jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
+            switch ($negative) {
+                case '0':
+                    $num1 = abs($num1);
+                    $num2 = abs($num2);
+                    break;
+
+                case '1':
+                    $num1 = abs($num1);
+                    $num2 = -abs($num2);
+                    break;
+
+                case '2':
+                    $num1 = -abs($num1);
+                    $num2 = -abs($num2);
+                    break;
+
+                default:
+                    $num1 = abs($num1);
+                    $num2 = abs($num2);
+                    break;
             }
 
             $question = "$num1 - $num2 =";

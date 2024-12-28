@@ -11,19 +11,18 @@ Route::get('math-generator/addition', function () {
     $min = request('min', 1);
     $max = request('max', 100);
     $count = request('count', 3);
+    $negative = request('negative', 0);
+    $level = request('level', 1);
 
-    $random = SeedHelper::generateRandomNumber($seed);
-    $addition = AdditionHelper::generateProblem($random, $min, $max);
-    $anyAdditions = AdditionHelper::generateAnyProblems($random, $min, $max, $count);
-    // $additonWorldProblem = AdditionHelper::generateWorldProblem($random, $min, $max);
+    $random = SeedHelper::generateSeed($seed);
+    $addition = AdditionHelper::generateProblem($random, $min, $max, $count, $negative);
+    $additonWorldProblem = AdditionHelper::generateWorldProblem($random, $min, $max, $count, $level);
     // $additonAnyWorldProblems = AdditionHelper::generateAnyWorldProblems($random, $min, $max, $count);
 
     return response()->json([
         'random' => $random,
         'addition' => $addition,
-        'any_additions' => $anyAdditions,
-        // 'addition_world_problem' => $additonWorldProblem,
-        // 'any_addition_world_problems' => $additonAnyWorldProblems,
+        'addition_world_problem' => $additonWorldProblem,
     ]);
 });
 
@@ -34,7 +33,7 @@ Route::get('math-generator/subtraction', function () {
     $count = request('count', 3);
     $negative = request('negative', false);
 
-    $random = SeedHelper::generateRandomNumber($seed);
+    $random = SeedHelper::generateSeed($seed);
     $subraction = SubtractionHelper::generateProblem($random, $min, $max, $negative);
     $anySubtractions = SubtractionHelper::generateAnyProblems($random, $min, $max, $count, $negative);
     // $subtractionWorldProblem = SubtractionHelper::generateWorldProblem($random, $min, $max, $negative);
@@ -57,7 +56,7 @@ Route::get('math-generator/multiplication', function () {
     $negative = request('negative', false);
     $allNegative = request('all_negative', false);
 
-    $random = SeedHelper::generateRandomNumber($seed);
+    $random = SeedHelper::generateSeed($seed);
     $multiplication = MultiplicationHelper::generateProblem($random, $min, $max, $negative, $allNegative);
     $anyMultiplications = MultiplicationHelper::generateAnyProblems($random, $min, $max, $count, $negative, $allNegative);
     // $multiplicationWorldProblem = MultiplicationHelper::generateWorldProblem($random, $min, $max);
@@ -70,4 +69,25 @@ Route::get('math-generator/multiplication', function () {
         // 'multiplication_world_problem' => $multiplicationWorldProblem,
         // 'any_addition_world_problems' => $additonAnyWorldProblems,
     ]);
+});
+
+
+Route::get('math-generator/number', function () {
+    $seed = request('seed', 'teguhpermadi');
+    $min = request('min', 1);
+    $max = request('max', 100);
+    $count = request('count', 2);
+    $negative = request('negative', 0);
+
+    $random = SeedHelper::generateSeed($seed);
+    $number = SeedHelper::generateNumber($random, $min, $max, $count, $negative);
+
+    return response()->json([
+        'seed' => $random,
+        'number' => $number,
+    ]);
+});
+
+Route::get('tes', function () {
+    
 });
