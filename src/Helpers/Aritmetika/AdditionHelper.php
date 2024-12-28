@@ -144,6 +144,7 @@ class AdditionHelper
 
         $problems = [];
         $questions = SeedHelper::generateNumber($seed, $min, $max, $count);
+        $context = WorldProblemHelper::randomContex($seed);
 
         foreach ($questions as $question) {
             $num1 = $question[0];
@@ -158,8 +159,6 @@ class AdditionHelper
 
             // jika level 0 berarti $questionLevel = mudah, jika level 1 berarti $questionLevel = sedang, jika level 2 berarti $questionLevel = sulit
             $questionLevel = $level == 0 ? 'mudah' : ($level == 1 ? 'sedang' : 'sulit');
-
-            $context = WorldProblemHelper::randomContex($seed);
 
             // create a generative model request
             $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(

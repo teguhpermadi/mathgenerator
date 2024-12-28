@@ -8,16 +8,15 @@ use Teguhpermadi\Mathgenerator\Helpers\SeedHelper;
 
 Route::get('math-generator/addition', function () {
     $seed = request('seed', 'teguhpermadi');
-    $min = request('min', 1);
-    $max = request('max', 100);
-    $count = request('count', 3);
-    $negative = request('negative', 0);
-    $level = request('level', 1);
+    $min = (int) request('min', 1);
+    $max = (int) request('max', 100);
+    $count = (int) request('count', 3);
+    $negative = (int) request('negative', 0);
+    $level = (int) request('level', 1);
 
     $random = SeedHelper::generateSeed($seed);
     $addition = AdditionHelper::generateProblem($random, $min, $max, $count, $negative);
     $additonWorldProblem = AdditionHelper::generateWorldProblem($random, $min, $max, $count, $level);
-    // $additonAnyWorldProblems = AdditionHelper::generateAnyWorldProblems($random, $min, $max, $count);
 
     return response()->json([
         'random' => $random,
@@ -28,23 +27,20 @@ Route::get('math-generator/addition', function () {
 
 Route::get('math-generator/subtraction', function () {
     $seed = request('seed', 'teguhpermadi');
-    $min = request('min', 1);
-    $max = request('max', 100);
-    $count = request('count', 3);
-    $negative = request('negative', false);
+    $min = (int) request('min', 1);
+    $max = (int) request('max', 100);
+    $count = (int) request('count', 3);
+    $negative = (int) request('negative', 0);
+    $level = (int) request('level', 1);
 
     $random = SeedHelper::generateSeed($seed);
-    $subraction = SubtractionHelper::generateProblem($random, $min, $max, $negative);
-    $anySubtractions = SubtractionHelper::generateAnyProblems($random, $min, $max, $count, $negative);
-    // $subtractionWorldProblem = SubtractionHelper::generateWorldProblem($random, $min, $max, $negative);
-    // $additonAnyWorldProblems = SubtractionHelper::generateAnyWorldProblems($random, $min, $max, $count);
+    $subraction = SubtractionHelper::generateProblem($random, $min, $max, $count, $negative);
+    $subtractionWorldProblem = SubtractionHelper::generateWorldProblem($random, $min, $max, $count, $negative, $level);
 
     return response()->json([
         'random' => $random,
         'subtraction' => $subraction,
-        'any_subtractions' => $anySubtractions,
-        // 'subtraction_world_problem' => $subtractionWorldProblem,
-        // 'any_addition_world_problems' => $additonAnyWorldProblems,
+        'subtraction_world_problem' => $subtractionWorldProblem,
     ]);
 });
 

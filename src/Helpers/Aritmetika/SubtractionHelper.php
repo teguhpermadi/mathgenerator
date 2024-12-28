@@ -5,6 +5,7 @@ namespace Teguhpermadi\Mathgenerator\Helpers\Aritmetika;
 use GeminiAPI\Client;
 use GeminiAPI\Resources\ModelName;
 use GeminiAPI\Resources\Parts\TextPart;
+use Teguhpermadi\Mathgenerator\Helpers\Aritmetika\WorldProblem\WorldProblemHelper;
 use Teguhpermadi\Mathgenerator\Helpers\SeedHelper;
 
 class SubtractionHelper
@@ -92,88 +93,42 @@ class SubtractionHelper
      * @param  bool  $negative  Allow negative results.
      * @return array Contains the question and the answer.
      */
-    public static function generateProblem(int $seed, int $min, $max, string $negative = '0'): array
-    {
-        srand($seed);
-        $num1 = rand($min, $max);
-        $num2 = rand($min, $num1);
-
-        // switch case, jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
-        switch ($negative) {
-            case '0':
-                $num1 = abs($num1);
-                $num2 = abs($num2);
-                break;
-
-            case '1':
-                $num1 = abs($num1);
-                $num2 = -abs($num2);
-                break;
-
-            case '2':
-                $num1 = -abs($num1);
-                $num2 = -abs($num2);
-                break;
-
-            default:
-                $num1 = abs($num1);
-                $num2 = abs($num2);
-                break;
-        }
-
-        $question = "$num1 - $num2 =";
-        $answer = $num1 - $num2;
-
-        $choice = self::generateChoice($answer);
-
-        return [
-            'question' => $question,
-            'answer' => $answer,
-            'choices' => $choice['choices'],
-            'correct' => $choice['correct'],
-        ];
-    }
-
-    /**
-     * Generate any addition problems from a seed number.
-     *
-     * @param  string  $problem  The problem string.
-     * @return array Contains the question and the answer.
-     */
-    public static function generateAnyProblems(int $seed, int $min, $max, int $count = 10, string $negative = '0'): array
+    public static function generateProblem(int $seed, int $min, $max, int $count = 3, int $negative = 0): array
     {
         srand($seed);
         $problems = [];
+        $questions = SeedHelper::generateNumber($seed, $min, $max, $count, $negative);
 
-        for ($i = 0; $i < $count; $i++) {
-            $num1 = rand($min, $max);
-            $num2 = rand($min, $max);
+        foreach ($questions as $question) {
+            $num1 = $question[0];
+            $num2 = $question[1];
 
             // switch case, jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
             switch ($negative) {
-                case '0':
+                case 0:
                     $num1 = abs($num1);
                     $num2 = abs($num2);
                     break;
-
-                case '1':
+    
+                case 1:
                     $num1 = abs($num1);
                     $num2 = -abs($num2);
                     break;
-
-                case '2':
+    
+                case 2:
                     $num1 = -abs($num1);
                     $num2 = -abs($num2);
                     break;
-
+    
                 default:
                     $num1 = abs($num1);
                     $num2 = abs($num2);
                     break;
             }
-
+    
             $question = "$num1 - $num2 =";
             $answer = $num1 - $num2;
+    
             $choice = self::generateChoice($answer);
 
             $problems[] = [
@@ -194,68 +149,67 @@ class SubtractionHelper
      * @param  int  $num2  Second number.
      * @return array Contains the question and the answer.
      */
-    public static function generateWorldProblem(int $seed, int $min, int $max, bool $negative = false): array
+    public static function generateWorldProblem(int $seed, int $min, int $max, int $count = 3, int $negative = 0, int $level = 1): array
     {
         srand($seed);
-        $num1 = rand($min, $max);
-        $num2 = rand($min, $max);
 
-        if ($negative) {
-            if ($num1 > $num2) {
-                [$num1, $num2] = [$num2, $num1];
-            } else {
-                [$num1, $num2] = [$num1, $num2];
+        $problems = [];
+        $questions = SeedHelper::generateNumber($seed, $min, $max, $count);
+        $context = WorldProblemHelper::randomContex($seed);
+
+        foreach ($questions as $question) {
+            $num1 = $question[0];
+            $num2 = $question[1];
+
+            // switch case, jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
+            switch ($negative) {
+                case 0:
+                    $num1 = abs($num1);
+                    $num2 = abs($num2);
+                    break;
+    
+                case 1:
+                    $num1 = abs($num1);
+                    $num2 = -abs($num2);
+                    break;
+    
+                case 2:
+                    $num1 = -abs($num1);
+                    $num2 = -abs($num2);
+                    break;
+    
+                default:
+                    $num1 = abs($num1);
+                    $num2 = abs($num2);
+                    break;
             }
-        } else {
-            if ($num1 < $num2) {
-                [$num1, $num2] = [$num2, $num1];
-            } else {
-                [$num1, $num2] = [$num1, $num2];
-            }
-        }
 
-        $question = "$num1 - $num2 =";
-        $answer = $num1 - $num2;
+            $question = "$num1 - $num2 =";
+            $answer = $num1 - $num2;
+    
+            $choices = self::generateChoice($answer);
+    
+            $client = new Client(config('mathgenerator.gemini.api_key'));
+            // jika level 0 berarti $questionLevel = mudah, jika level 1 berarti $questionLevel = sedang, jika level 2 berarti $questionLevel = sulit
+            $questionLevel = $level == 0 ? 'mudah' : ($level == 1 ? 'sedang' : 'sulit');
 
-        $choices = self::generateChoice($answer);
-
-        $client = new Client(config('mathgenerator.gemini.api_key'));
-
-        if ($negative) {
             // create a generative model request
             $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-                new TextPart('buatkan soal cerita tentang implementasi bilangan negatif dalam kehidupan. Misalnya: suhu, utang, ketinggian (kartografi), waktu, laba-rugi, dan lain sebagainya.'),
-                new TextPart('respon hanya soal cerita saja, tanpa judul atau penjelasan lainnya tentang cara penyelesaian soal tersebut.'),
-                new TextPart('soal cerita tentang operasi pengurangan : ' . $num1 . ' - ' . $num2),
+                new TextPart('soal cerita pengurangan dengan tingkat kesulitan' . $questionLevel . ' yang melibatkan soal berikut: ' . $question),                
+                new TextPart('Pastikan diawal cerita terdapat kalimat stimulus untuk menjelaskan konteks soal cerita.'),
+                new TextPart('Pastikan soal cerita yang dibuat menggunakan bilangan yang sesuai dengan soal tanpa diberikan tambahan apapun.'),
+                new TextPart('Pastikan soal cerita yang kamu buat menggunakan konteks '. $context . '.'),
+                new TextPart('Hasil keluaran harus berupa kalimat tanya langsung yang murni soal cerita penjumlahan.'),
             );
-        } else {
-            // create a generative model request
-            $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-                new TextPart('buatkan soal cerita sederhana dari operasi pengurangan berikut: ' . $question),
-            );
+    
+            $problems[] = [
+                'question' => $question,
+                'answer' => $answer,
+                'world_problem' => $questionResponse->text(),
+                'correct' => $choices['correct'],
+            ];
         }
 
-        $answerResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-            new TextPart('contoh masalah: Ani memiliki 3 pensil dan Budi memiliki 2 pensil. Berapa selisih pensil mereka?'),
-            new TextPart('contoh jawaban: Jadi selisih pensil mereka adalah {x} pensil.'),
-            new TextPart('Saya memiliki masalah: ' . $questionResponse->text()),
-            new TextPart('Jawaban dari masalah tersebut dengan variable {x}.'),
-        );
-
-        $textAnswer = $answerResponse->text();
-
-        // ambil setiap choice
-        foreach ($choices['choices'] as $key => $value) {
-            // ubah variable {x} dengan jawaban yang benar
-            $choices['choices'][$key] = str_replace('{x}', $value, $textAnswer);
-        }
-
-        return [
-            'question' => $question,
-            'answer' => $answer,
-            'world_problem' => $questionResponse->text(),
-            'world_problem_choice' => $choices['choices'],
-            'correct' => $choices['correct'],
-        ];
+        return $problems;
     }
 }
