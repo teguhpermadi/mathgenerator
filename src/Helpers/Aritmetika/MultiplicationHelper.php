@@ -72,7 +72,7 @@ class MultiplicationHelper
             'correct' => $correct,
         ];
     }
-    
+
     /**
      * Generate an multiplication problem from two numbers.
      *
@@ -96,27 +96,27 @@ class MultiplicationHelper
                     $num1 = abs($num1);
                     $num2 = abs($num2);
                     break;
-    
+
                 case 1:
                     $num1 = abs($num1);
                     $num2 = -abs($num2);
                     break;
-    
+
                 case 2:
                     $num1 = -abs($num1);
                     $num2 = -abs($num2);
                     break;
-    
+
                 default:
                     $num1 = abs($num1);
                     $num2 = abs($num2);
                     break;
             }
-    
+
             $question = "$num1 * $num2";
             $answer = $num1 * $num2;
-    
-            $choice = self::generateChoice($num1,$num2,$answer);
+
+            $choice = self::generateChoice($num1, $num2, $answer);
 
             $problems[] = [
                 'question' => $question,
@@ -154,17 +154,17 @@ class MultiplicationHelper
                     $num1 = abs($num1);
                     $num2 = abs($num2);
                     break;
-    
+
                 case 1:
                     $num1 = abs($num1);
                     $num2 = -abs($num2);
                     break;
-    
+
                 case 2:
                     $num1 = -abs($num1);
                     $num2 = -abs($num2);
                     break;
-    
+
                 default:
                     $num1 = abs($num1);
                     $num2 = abs($num2);
@@ -173,22 +173,22 @@ class MultiplicationHelper
 
             $question = "$num1 * $num2";
             $answer = $num1 * $num2;
-    
+
             $choices = self::generateChoice($num1, $num2, $answer);
-    
+
             $client = new Client(config('mathgenerator.gemini.api_key'));
             // jika level 0 berarti $questionLevel = mudah, jika level 1 berarti $questionLevel = sedang, jika level 2 berarti $questionLevel = sulit
             $questionLevel = $level == 0 ? 'mudah' : ($level == 1 ? 'sedang' : 'sulit');
 
             // create a generative model request
             $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-                new TextPart('soal cerita perkalian dengan tingkat kesulitan' . $questionLevel . ' yang melibatkan soal berikut: ' . $question),                
+                new TextPart('soal cerita perkalian dengan tingkat kesulitan'.$questionLevel.' yang melibatkan soal berikut: '.$question),
                 new TextPart('Pastikan diawal cerita terdapat kalimat stimulus untuk menjelaskan konteks soal cerita.'),
                 new TextPart('Pastikan soal cerita yang dibuat menggunakan bilangan yang sesuai dengan soal tanpa diberikan tambahan apapun.'),
-                new TextPart('Pastikan soal cerita yang kamu buat menggunakan konteks '. $context . '.'),
+                new TextPart('Pastikan soal cerita yang kamu buat menggunakan konteks '.$context.'.'),
                 new TextPart('Hasil keluaran harus berupa kalimat tanya langsung yang murni soal cerita penjumlahan.'),
             );
-    
+
             $problems[] = [
                 'question' => $question,
                 'answer' => $answer,

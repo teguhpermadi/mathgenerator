@@ -84,12 +84,13 @@ class AdditionHelper
         ];
     }
 
-    /** 
+    /**
      * Generate true or false question.
-     * @param int $question The correct answer.
+     *
+     * @param  int  $question  The correct answer.
+     *
      * @rerurn array Contains the question and the answer.
      */
-
     public static function generateTrueFalse($question)
     {
         // lakukan perhitungan berdasarkan soal
@@ -162,10 +163,10 @@ class AdditionHelper
 
             // create a generative model request
             $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
-                new TextPart('soal cerita penjumlahan dengan tingkat kesulitan' . $questionLevel . ' yang melibatkan soal berikut: ' . $question),                
+                new TextPart('soal cerita penjumlahan dengan tingkat kesulitan'.$questionLevel.' yang melibatkan soal berikut: '.$question),
                 new TextPart('Pastikan diawal cerita terdapat kalimat stimulus untuk menjelaskan konteks soal cerita.'),
                 new TextPart('Pastikan soal cerita yang dibuat menggunakan bilangan yang sesuai dengan soal tanpa diberikan tambahan apapun.'),
-                new TextPart('Pastikan soal cerita yang kamu buat menggunakan konteks '. $context . '.'),
+                new TextPart('Pastikan soal cerita yang kamu buat menggunakan konteks '.$context.'.'),
                 new TextPart('Hasil keluaran harus berupa kalimat tanya langsung yang murni soal cerita penjumlahan.'),
             );
 

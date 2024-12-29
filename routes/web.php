@@ -63,7 +63,6 @@ Route::get('math-generator/multiplication', function () {
     ]);
 });
 
-
 Route::get('math-generator/number', function () {
     $seed = request('seed', 'teguhpermadi');
     $min = request('min', 1);
@@ -80,6 +79,4 @@ Route::get('math-generator/number', function () {
     ]);
 });
 
-Route::get('tes', function () {
-    
-});
+Route::get('tes', function () {});

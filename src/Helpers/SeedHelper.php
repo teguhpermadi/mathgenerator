@@ -14,7 +14,7 @@ class SeedHelper
     {
         // Konversi seed ke integer
         $hash = crc32($seed);
-        
+
         return $hash;
     }
 
@@ -69,19 +69,20 @@ class SeedHelper
 
     /**
      * Menghasilkan angka random berdasarkan seed.
-     * @param int $seed Seed yang diinput
+     *
+     * @param  int  $seed  Seed yang diinput
      * @param  int  $min  Batas bawah angka
      * @param  int  $max  Batas atas angka
      * @param  int  $count  Jumlah angka yang dihasilkan
-     * @param string $negative 0, 1, 2
-     * jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
+     * @param  string  $negative  0, 1, 2
+     *                            jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
      * @return array Angka random
      */
     public static function generateNumber(int $seed, int $min = 0, int $max = 100, int $count = 2, int $negative = 0)
     {
         // inputkan seed
         srand($seed);
-        
+
         // jika $count kurang 1 maka set $count menjadi 1
         if ($count < 1) {
             $count = 1;
@@ -110,7 +111,7 @@ class SeedHelper
                 default:
                     // jika 0 maka $num1 atau $num2 bernilai positif
                     break;
-            
+
             }
             $numbers[] = [$num1, $num2];
         }

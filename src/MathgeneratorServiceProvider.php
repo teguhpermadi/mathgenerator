@@ -2,10 +2,10 @@
 
 namespace Teguhpermadi\Mathgenerator;
 
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Teguhpermadi\Mathgenerator\Commands\MathgeneratorCommand;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class MathgeneratorServiceProvider extends PackageServiceProvider
 {
@@ -30,7 +30,7 @@ class MathgeneratorServiceProvider extends PackageServiceProvider
                 MathgeneratorCommand::class,
             ])
             ->hasRoute('web') // Ini akan otomatis mencari file routes/web.php
-            ->hasInstallCommand(function(InstallCommand $command) {
+            ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
                     ->publishAssets()
