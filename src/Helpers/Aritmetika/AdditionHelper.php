@@ -172,11 +172,11 @@ class AdditionHelper
             $problems[] = [
                 'question' => $question,
                 'answer' => $answer,
+                'world_problem' => $questionResponse->text(),
                 'multiple_choice' => [
                     'choices' => $choice['choices'],
                     'correct' => $choice['correct'],
                 ],
-                'world_problem' => $questionResponse->text(),
             ];
         }
 

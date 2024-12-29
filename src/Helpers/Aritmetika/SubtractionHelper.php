@@ -93,7 +93,7 @@ class SubtractionHelper
      * @param  bool  $negative  Allow negative results.
      * @return array Contains the question and the answer.
      */
-    public static function generateProblem(int $seed, int $min, $max, int $count = 3, int $negative = 0): array
+    public static function generateProblem(int $seed, int $min, int $max, int $count = 3, int $negative = 0)
     {
         srand($seed);
         $problems = [];
@@ -126,7 +126,7 @@ class SubtractionHelper
                     break;
             }
     
-            $question = "$num1 - $num2 =";
+            $question = "$num1 - $num2";
             $answer = $num1 - $num2;
     
             $choice = self::generateChoice($answer);
@@ -184,7 +184,7 @@ class SubtractionHelper
                     break;
             }
 
-            $question = "$num1 - $num2 =";
+            $question = "$num1 - $num2";
             $answer = $num1 - $num2;
     
             $choices = self::generateChoice($answer);
@@ -206,7 +206,10 @@ class SubtractionHelper
                 'question' => $question,
                 'answer' => $answer,
                 'world_problem' => $questionResponse->text(),
-                'correct' => $choices['correct'],
+                'multiple_choice' => [
+                    'choices' => $choices['choices'],
+                    'correct' => $choices['correct'],
+                ],
             ];
         }
 

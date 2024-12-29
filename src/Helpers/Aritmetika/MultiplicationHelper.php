@@ -2,6 +2,10 @@
 
 namespace TeguhPermadi\MathGenerator\Helpers\Aritmetika;
 
+use GeminiAPI\Client;
+use GeminiAPI\Resources\ModelName;
+use GeminiAPI\Resources\Parts\TextPart;
+use Teguhpermadi\Mathgenerator\Helpers\Aritmetika\WorldProblem\WorldProblemHelper;
 use Teguhpermadi\Mathgenerator\Helpers\SeedHelper;
 
 class MultiplicationHelper
@@ -76,74 +80,123 @@ class MultiplicationHelper
      * @param  int  $num2  Second number.
      * @return array Contains the question and the answer.
      */
-    public static function generateProblem(int $seed, int $min, int $max, bool $negative = false, bool $allNegative = false): array
-    {
-        srand($seed);
-        $num1 = rand($min, $max);
-        $num2 = rand($min, $max);
-
-        if ($negative) {
-            // berikan tanda negatif pada num1 atau num2
-            $num1 = rand(0, 1) ? $num1 : -$num1;
-            $num2 = rand(0, 1) ? $num2 : -$num2;
-        }
-
-        if ($allNegative) {
-            // berikan tanda negatif pada kedua num1 dan num2
-            $num1 = -$num1;
-            $num2 = -$num2;
-        }
-
-        $question = "$num1 * $num2 =";
-        $answer = $num1 * $num2;
-
-        $choices = self::generateChoice($num1, $num2, $answer);
-
-        return [
-            'question' => $question,
-            'answer' => $answer,
-            'choices' => $choices['choices'],
-            'correct' => $choices['correct'],
-        ];
-    }
-
-    /**
-     * Generate any multiplication problems from a seed number.
-     *
-     * @param  string  $problem  The problem string.
-     * @return array Contains the question and the answer.
-     */
-    public static function generateAnyProblems(int $seed, int $min, $max, int $count = 10, bool $negative = false, bool $allNegative = false): array
+    public static function generateProblem(int $seed, int $min, int $max, int $count = 3, int $negative = 0): array
     {
         srand($seed);
         $problems = [];
+        $questions = SeedHelper::generateNumber($seed, $min, $max, $count, $negative);
 
-        for ($i = 0; $i < $count; $i++) {
-            $num1 = rand($min, $max);
-            $num2 = rand($min, $max);
+        foreach ($questions as $question) {
+            $num1 = $question[0];
+            $num2 = $question[1];
 
-            if ($negative) {
-                // berikan tanda negatif pada num1 atau num2
-                $num1 = rand(0, 1) ? $num1 : -$num1;
-                $num2 = rand(0, 1) ? $num2 : -$num2;
+            // switch case, jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
+            switch ($negative) {
+                case 0:
+                    $num1 = abs($num1);
+                    $num2 = abs($num2);
+                    break;
+    
+                case 1:
+                    $num1 = abs($num1);
+                    $num2 = -abs($num2);
+                    break;
+    
+                case 2:
+                    $num1 = -abs($num1);
+                    $num2 = -abs($num2);
+                    break;
+    
+                default:
+                    $num1 = abs($num1);
+                    $num2 = abs($num2);
+                    break;
             }
-
-            if ($allNegative) {
-                // berikan tanda negatif pada kedua num1 dan num2
-                $num1 = -$num1;
-                $num2 = -$num2;
-            }
-
-            $question = "$num1 * $num2 =";
+    
+            $question = "$num1 * $num2";
             $answer = $num1 * $num2;
-
-            $choices = self::generateChoice($num1, $num2, $answer);
+    
+            $choice = self::generateChoice($num1,$num2,$answer);
 
             $problems[] = [
                 'question' => $question,
                 'answer' => $answer,
-                'choices' => $choices['choices'],
-                'correct' => $choices['correct'],
+                'choices' => $choice['choices'],
+                'correct' => $choice['correct'],
+            ];
+        }
+
+        return $problems;
+    }
+
+    /**
+     * Generate an addition world problem from two numbers.
+     *
+     * @param  int  $num1  First number.
+     * @param  int  $num2  Second number.
+     * @return array Contains the question and the answer.
+     */
+    public static function generateWorldProblem(int $seed, int $min, int $max, int $count = 3, int $negative = 0, int $level = 1): array
+    {
+        srand($seed);
+
+        $problems = [];
+        $questions = SeedHelper::generateNumber($seed, $min, $max, $count);
+        $context = WorldProblemHelper::randomContex($seed);
+
+        foreach ($questions as $question) {
+            $num1 = $question[0];
+            $num2 = $question[1];
+
+            // switch case, jika 0 maka $num1 atau $num2 bernilai positif, jika 1 maka salah satu dari $num1 atau $num2 bernilai negatif, jika 2 maka kedua $num1 dan $num2 bernilai negatif
+            switch ($negative) {
+                case 0:
+                    $num1 = abs($num1);
+                    $num2 = abs($num2);
+                    break;
+    
+                case 1:
+                    $num1 = abs($num1);
+                    $num2 = -abs($num2);
+                    break;
+    
+                case 2:
+                    $num1 = -abs($num1);
+                    $num2 = -abs($num2);
+                    break;
+    
+                default:
+                    $num1 = abs($num1);
+                    $num2 = abs($num2);
+                    break;
+            }
+
+            $question = "$num1 * $num2";
+            $answer = $num1 * $num2;
+    
+            $choices = self::generateChoice($num1, $num2, $answer);
+    
+            $client = new Client(config('mathgenerator.gemini.api_key'));
+            // jika level 0 berarti $questionLevel = mudah, jika level 1 berarti $questionLevel = sedang, jika level 2 berarti $questionLevel = sulit
+            $questionLevel = $level == 0 ? 'mudah' : ($level == 1 ? 'sedang' : 'sulit');
+
+            // create a generative model request
+            $questionResponse = $client->generativeModel(ModelName::GEMINI_PRO)->generateContent(
+                new TextPart('soal cerita perkalian dengan tingkat kesulitan' . $questionLevel . ' yang melibatkan soal berikut: ' . $question),                
+                new TextPart('Pastikan diawal cerita terdapat kalimat stimulus untuk menjelaskan konteks soal cerita.'),
+                new TextPart('Pastikan soal cerita yang dibuat menggunakan bilangan yang sesuai dengan soal tanpa diberikan tambahan apapun.'),
+                new TextPart('Pastikan soal cerita yang kamu buat menggunakan konteks '. $context . '.'),
+                new TextPart('Hasil keluaran harus berupa kalimat tanya langsung yang murni soal cerita penjumlahan.'),
+            );
+    
+            $problems[] = [
+                'question' => $question,
+                'answer' => $answer,
+                'world_problem' => $questionResponse->text(),
+                'multiple_choice' => [
+                    'choices' => $choices['choices'],
+                    'correct' => $choices['correct'],
+                ],
             ];
         }
 
